@@ -39,6 +39,9 @@ def parse_pdf(file):
 
 
 def extract_words(contents, ignored_words):
+    import logging
+    jieba.setLogLevel(logging.INFO)
+
     all_words = []
     for content in contents:
         words = jieba.cut(content, cut_all=False)
