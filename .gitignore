@@ -339,5 +339,5 @@ dmypy.json
 
 
 #custom
-/slides
+wordcloud/slides
 *.ttc
