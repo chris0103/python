@@ -44,7 +44,7 @@ def extract_words(contents, ignored_words):
 
     all_words = []
     for content in contents:
-        words = jieba.cut(content, cut_all=False)
+        words = jieba.cut(content, cut_all=True)
         for word in words:
             trimmed_word = word.lstrip().rstrip()
             if trimmed_word == "":

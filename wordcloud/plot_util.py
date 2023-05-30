@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 def generate_cloud(freq_table):
-    q_mask = np.array(Image.open(path.join("Q_big.png")))
+    q_mask = np.array(Image.open(path.join("chat.png")))
     wc = WordCloud(
         width=4000,
         height=2000,
