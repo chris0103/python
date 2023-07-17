@@ -5,8 +5,8 @@ import ssl
 ssl._create_default_https_context=ssl._create_unverified_context
 import json
 
-secret_id = "AKIDGPL4ZqvnRs69zeHjyyjIepmW3MQGuKWW"
-secret_key = "qRoxqUt2xf8LL6brvmOl171g7LNCmIm5"
+secret_id = "xxx"
+secret_key = "xxx"
 assume_role = "qcs::cam::uin/100019001611:roleName/COS_OPProd_eSignature_RW"
 region = "ap-shanghai"
 bucket_name = "sanofi-apac-prod-op-esignature-1305705473"
