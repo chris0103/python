@@ -2,7 +2,8 @@ from parse_util import *
 from plot_util import *
 
 words_freq_table = {}
-trivial_words = ['的', '不', '和', '是', '用', '在', 'the', 'and', '（', '）', '(', ')', '/', '\\']
+trivial_words = ['的', '和', 'the', 'and', '（', '）', '(', ')', '/', '\\', '&']
+controls = ['Piji', 'Li']
 highlights = ['ChatGPT']
 
 slides = get_slides("slides")
@@ -10,7 +11,7 @@ for slide in slides:
     if slide.name.endswith(".pdf"):
         print('Parsing slide ' + slide.name)
         contents = parse_pdf(slide)
-        words = extract_words(contents, trivial_words + highlights)
+        words = extract_words(contents, trivial_words + controls + highlights)
         for word in words:
             if word in words_freq_table:
                 words_freq_table[word] += 1
