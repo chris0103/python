@@ -341,4 +341,5 @@ dmypy.json
 #custom
 wordcloud/slides
 *.ttc
+*.docx
 homebred

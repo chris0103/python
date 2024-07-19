@@ -1,5 +1,8 @@
 import openpyxl
 from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
 
 
 class Field:
@@ -42,7 +45,7 @@ class Person:
 
 
 phones = {}
-wb_phones = openpyxl.load_workbook('phones.xlsx')
+wb_phones = openpyxl.load_workbook('files/phones.xlsx')
 sheet = wb_phones.worksheets[0]
 for row in range(4, sheet.max_row):
     name = sheet.cell(row, 2).value
@@ -51,7 +54,7 @@ for row in range(4, sheet.max_row):
 # print(phones)
 
 
-wb_fields = openpyxl.load_workbook('fields.xlsx')
+wb_fields = openpyxl.load_workbook('files/fields.xlsx')
 
 # get sheet names
 # print(wb.sheetnames)
@@ -88,6 +91,7 @@ for row in range(5, sheet.max_row):
 wb_table = Workbook()
 for person in persons:
     ws = wb_table.create_sheet(person.name)
+
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=12)
     ws.cell(row=1, column=1, value=f'附件3')
     ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=12)
@@ -116,7 +120,7 @@ for person in persons:
 
     for idx, field in enumerate(person.fields):
         row = 6 + idx * 3
-        ws.merge_cells(start_row=row, start_column=1, end_row=row+2, end_column=1)
+        ws.merge_cells(start_row=row, start_column=1, end_row=row + 2, end_column=1)
         ws.cell(row=row, column=1, value=f'地块{idx + 1}')
         ws.cell(row=row, column=2, value=f'地块编码')
         ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=6)
@@ -126,26 +130,27 @@ for person in persons:
         ws.cell(row=row, column=11, value='实测面积')
         ws.cell(row=row, column=12, value=field.actual_area)
         row += 1
-        ws.merge_cells(start_row=row, start_column=2, end_row=row+1, end_column=2)
+        ws.merge_cells(start_row=row, start_column=2, end_row=row + 1, end_column=2)
         ws.cell(row=row, column=2, value=f'四至')
         ws.cell(row=row, column=3, value=f'东至')
-        ws.cell(row=row, column=4, value=field.east_to)
+        east_to = ws.cell(row=row, column=4, value=field.east_to)
         ws.cell(row=row, column=5, value=f'南至')
         ws.cell(row=row, column=6, value=field.south_to)
-        ws.cell(row=row+1, column=3, value=f'西至')
-        ws.cell(row=row+1, column=4, value=field.west_to)
-        ws.cell(row=row+1, column=5, value=f'北至')
-        ws.cell(row=row+1, column=6, value=field.north_to)
-        ws.merge_cells(start_row=row, start_column=7, end_row=row+1, end_column=7)
+        ws.cell(row=row + 1, column=3, value=f'西至')
+        ws.cell(row=row + 1, column=4, value=field.west_to)
+        ws.cell(row=row + 1, column=5, value=f'北至')
+        ws.cell(row=row + 1, column=6, value=field.north_to)
+        ws.merge_cells(start_row=row, start_column=7, end_row=row + 1, end_column=7)
         ws.cell(row=row, column=7, value=f'平台流转面积')
-        ws.merge_cells(start_row=row, start_column=8, end_row=row+1, end_column=8)
+        ws.merge_cells(start_row=row, start_column=8, end_row=row + 1, end_column=8)
         ws.merge_cells(start_row=row, start_column=9, end_row=row + 1, end_column=9)
         ws.cell(row=row, column=9, value=f'私下流转面积')
         ws.merge_cells(start_row=row, start_column=10, end_row=row + 1, end_column=10)
         ws.merge_cells(start_row=row, start_column=11, end_row=row + 1, end_column=11)
         ws.cell(row=row, column=11, value=f'征用面积')
+        ws.merge_cells(start_row=row, start_column=12, end_row=row + 1, end_column=12)
 
-    row += 3
+    row += 2
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=5)
     ws.cell(row=row, column=1, value='是否愿意参加“小田变大田”改革')
     ws.merge_cells(start_row=row, start_column=6, end_row=row, end_column=12)
@@ -161,13 +166,37 @@ for person in persons:
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=5)
     ws.cell(row=row, column=1, value='其它需要反映的建议')
     ws.merge_cells(start_row=row, start_column=6, end_row=row, end_column=12)
+    row += 1
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=4)
+    ws.cell(row=row, column=1, value='农户签字（手印）：')
+    ws.merge_cells(start_row=row, start_column=5, end_row=row, end_column=8)
+    ws.cell(row=row, column=5, value='村书记签字：')
+    ws.merge_cells(start_row=row, start_column=9, end_row=row, end_column=12)
+    ws.cell(row=row, column=9, value='调查员签字：')
+
+    side = Side(border_style='thin', color='000000')
+    for cell in ws._cells.values():
+        cell.border = Border(top=side, bottom=side, left=side, right=side)
+        cell.font = Font(name='Microsoft YaHei', size=12)
+        cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    ws.cell(1, 1).font = Font(name='KaiTi', size=18)
+    ws.cell(1, 1).alignment = Alignment(vertical='center', wrap_text=True)
+    ws.cell(2, 1).font = Font(name='Microsoft YaHei', size=18)
+    ws.cell(2, 1).alignment = Alignment(horizontal='center', vertical='center')
+    ws.cell(3, 1).alignment = Alignment(vertical='center', wrap_text=True)
+    ws.cell(row, 1).alignment = Alignment(vertical='center', wrap_text=True)
+    ws.cell(row, 5).alignment = Alignment(vertical='center', wrap_text=True)
+    ws.cell(row, 9).alignment = Alignment(vertical='center', wrap_text=True)
+    for i in range(1, ws.max_row + 1):
+        ws.row_dimensions[i].height = 30
+    for i in range(1, ws.max_column):
+        if i in (4, 6):
+            ws.column_dimensions[get_column_letter(i)].width = 25
+        else:
+            ws.column_dimensions[get_column_letter(i)].width = 10
 
 del wb_table['Sheet']
 wb_table.save('stats.xlsx')
-
-
-
-
 
 # get cells area
 # print(sheet.dimensions)
